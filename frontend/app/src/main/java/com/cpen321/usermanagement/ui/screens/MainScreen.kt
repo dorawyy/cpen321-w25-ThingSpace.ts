@@ -8,8 +8,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
@@ -50,7 +55,8 @@ data class MainActions(
     val onChatClick: () -> Unit,
     val onSearchClick: () -> Unit,
     val onQueryChange: (String) -> Unit,
-    val onCreateNoteClick: () -> Unit
+    val onCreateNoteClick: () -> Unit,
+    val onProfileClick: () -> Unit
 )
 
 @Composable
@@ -61,6 +67,7 @@ fun MainScreen(
 ) {
     val uiState by mainViewModel.uiState.collectAsState()
     val fetching by mainViewModel.fetching.collectAsState()
+    val noteErrorMessage by mainViewModel.noteErrorMessage.collectAsState()
     val snackBarHostState = remember { SnackbarHostState() }
     val wsname =  mainViewModel.getWorkspaceName()
 
@@ -82,7 +89,8 @@ fun MainScreen(
         onCreateNoteClick = { featureActions.navs.navigateToTemplateTagReset(
             featureActions.state.getWorkspaceId()) },
         onNoteClick = {noteId:String -> featureActions.navs.navigateToNoteEdit(noteId)},
-        onQueryChange = {query:String -> featureActions.state.setSearchQuery(query)}
+        onQueryChange = {query:String -> featureActions.state.setSearchQuery(query)},
+        onProfileClick = onProfileClick
     )
 
     val searchState = SearchState(
@@ -94,7 +102,7 @@ fun MainScreen(
     MainContent(
         uiState = uiState,
         snackBarHostState = snackBarHostState,
-        onProfileClick = onProfileClick,
+        noteErrorMessage = noteErrorMessage,
         actions = actions,
         searchState = searchState,
         onSuccessMessageShown = mainViewModel::clearSuccessMessage,
@@ -112,7 +120,7 @@ data class SearchState(
 private fun MainContent(
     uiState: MainUiState,
     snackBarHostState: SnackbarHostState,
-    onProfileClick: () -> Unit,
+    noteErrorMessage: String?,
     actions: MainActions,
     searchState: SearchState,
     onSuccessMessageShown: () -> Unit,
@@ -121,7 +129,7 @@ private fun MainContent(
     Scaffold(
         modifier = modifier,
         topBar = {
-            MainTopBar(onProfileClick = onProfileClick)
+            MainTopBar(onProfileClick = actions.onProfileClick)
         },
         snackbarHost = {
             MainSnackbarHost(
@@ -144,7 +152,8 @@ private fun MainContent(
                 workspaceName = searchState.workspaceName,
                 actions = actions,
                 notes = searchState.notes,
-                query = searchState.query
+                query = searchState.query,
+                noteErrorMessage = noteErrorMessage
             )
         }
         else{
@@ -238,6 +247,7 @@ private fun MainBody(
     actions: MainActions,
     workspaceName: String,
     query: String,
+    noteErrorMessage: String?,
     notes:List<Note>,
     modifier: Modifier = Modifier
 ) {
@@ -255,6 +265,23 @@ private fun MainBody(
             onQueryChange = actions.onQueryChange,
             query = query
         )
+        if (noteErrorMessage != null){
+            val spacing = LocalSpacing.current
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.errorContainer
+                ),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    text = noteErrorMessage,
+                    color = MaterialTheme.colorScheme.onErrorContainer,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(spacing.medium)
+                )
+            }
+            Spacer(modifier = Modifier.height(spacing.medium))
+        }
         NoteDisplayList(
             onNoteClick = actions.onNoteClick,
             notes = notes,

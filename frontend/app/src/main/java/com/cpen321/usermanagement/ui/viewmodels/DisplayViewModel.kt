@@ -27,12 +27,14 @@ open class DisplayViewModel @Inject constructor(
 
     private var _wsname = "personal"
     private var _wsid = "personal"
-    private var _wsdescr = ""
-    private var _wspic = ""
 
     private var _notesPerPage = 10
 
-    protected val _fetching = MutableStateFlow<Boolean>(false)
+    private var _noteErrorMessage: MutableStateFlow<String?> = MutableStateFlow(null)
+
+    val noteErrorMessage: StateFlow<String?> = _noteErrorMessage.asStateFlow()
+
+    protected val _fetching = MutableStateFlow(false)
     val fetching: StateFlow<Boolean> =_fetching.asStateFlow()
 
     protected var _notesFound: List<List<Note>> = emptyList()
@@ -57,13 +59,8 @@ open class DisplayViewModel @Inject constructor(
     fun getWorkspaceName():String{
         val workspaceId = navigationStateManager.state.getWorkspaceId()
         viewModelScope.launch{cacheUpdateWorkspaceOrUser(workspaceId)}
-        return _wsname //TODO: if "" should move to userId
+        return _wsname
     }
-
-//    fun searchedNotesUpdate(){
-//        //TODO: Add pagination later
-//        viewModelScope.launch { searchResults() }
-//    }
 
     private suspend fun cacheUpdateWorkspaceOrUser(workspaceId:String){
             val wsRequest = workspaceRepository.getWorkspace(workspaceId)
@@ -71,16 +68,12 @@ open class DisplayViewModel @Inject constructor(
                 val ws: Workspace = wsRequest.getOrNull()!!
                 _wsid = workspaceId
                 _wsname = ws.profile.name
-                _wspic = ws.profile.imagePath ?: ""
-                _wsdescr = ws.profile.description ?: ""
             }
             else{
                 val personalResult = workspaceRepository.getPersonalWorkspace()
                 if (personalResult.isSuccess){
                     val ws = personalResult.getOrNull()!!
                     _wsid = ws._id
-                    _wspic = ws.profile.imagePath ?: ""
-                    _wsdescr = ws.profile.description ?: ""
                     _wsname = ws.profile.name
                     navigationStateManager.state.setWorkspaceId(ws._id)
                 }
@@ -94,12 +87,7 @@ open class DisplayViewModel @Inject constructor(
     }
 
     protected open suspend fun searchResults(){
-        val allTagsSelected = navigationStateManager.state.getAllTagsSelected()
-        val tags = navigationStateManager.state.getSelectedTags()//if (allTagsSelected) {
-//            emptyList() // Pass empty list when "All" is selected to not filter by tags
-//        } else {
-//            navigationStateManager.state.getSelectedTags()
-//        }
+        val tags = navigationStateManager.state.getSelectedTags()
 
         val noteSearchResult = noteRepository.findNotes(
             workspaceId = navigationStateManager.state.getWorkspaceId(),
@@ -111,9 +99,11 @@ open class DisplayViewModel @Inject constructor(
         if (noteSearchResult.isSuccess){
             val rawNotesFound = noteSearchResult.getOrNull()!!
             _notesFound = rawNotesFound.chunked(_notesPerPage)
+            _noteErrorMessage.value = null
         }
         else{
             _notesFound = emptyList()
+            _noteErrorMessage.value = noteSearchResult.exceptionOrNull()!!.message
         }
     }
 
