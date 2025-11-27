@@ -98,9 +98,9 @@
     <string name="datetime_config_coming_soon">Date/Time field configuration options coming soon</string>
     <string name="add_field">Add Field</string>
     <string name="no_fields_added">No fields added yet. Click \'Add Field\' to create one.</string>
-    <string name="share_note">Share Note</string>
+    <string name="share_note">Move Note</string>
     <string name="copy_note">Copy Note</string>
-    <string name="share">Share</string>
+    <string name="share">Move</string>
     <string name="copy">Copy</string>
     <string name="select_workspace">Select a workspace:</string>
     <!-- Creation screens -->
