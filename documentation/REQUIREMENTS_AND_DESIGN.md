@@ -100,25 +100,26 @@ NOTES: 5 most major use cases
 #### Use Case 1: [Create a Note]
 
 
-**Description**: App user is logged in and creates notes by filling the default empty template, adding or removing fields if necessary. When the note is created, it is automatically stored in the workspace the user clicked the create note button on.
+**Description**: App user is logged in and creates notes by filling the default empty template, adding or removing fields if necessary. When the note is created, it is automatically stored in the workspace the user clicked the create note button in.
 
 
 **Primary actor(s)**: User
    
 **Main success scenario**:
-1. User clicks the “Create Note” button and selects the "Content" category
-2. System displays a default empty template (a space to input tags, no fields, but a button to add them)
-3. User can add additional fields or remove fields.
-4. User inputs all details of the note into the fields
-5. User clicks “Create” button
-6. The system creates the note with the filled in data and stores it in the database, and displays a confirmation message.
+1. User presses the Create icon button.
+2. System displays the creation screen.
+3. User presses the Create a blank template button button, or click on one of the available templates.
+4. System displays the note creation screen, set to template mode: With a title field, tag field and a button to add content fields. If user selected a template, fields contained by the template appear, with label set to what is in the template and with content ready to be filled in.
+5. User customizes the note template to their desire by adding/removing/setting the content of the input fields around the space available. The tag and title fields are not removable.
+6. User clicks the “Create” confirmation button
+7. System saves the note template and navigates back to the note screen where the created note is visible
 
 
 **Failure scenario(s)**:
-- 5a. User did not create any fields
-    - 5a1. System displays a warning message prompting the user to at least create one field
-- 6a. The note could not be created
-    - 6a1. System displays error message stating that the note could not be created as well as the reason for the failure (e.g. connection lost)
+- 7a. The note could not be created (client side, missing inputs)
+    - 7a1. System displays a warning message prompting the user to at least create one field, add at least one tag, or set the title,depending on which of the three is missing
+- 7a. The note could not be created (server side)
+    - 7a1. System displays error message stating that the note could not be created as well as the reason for the failure (e.g. connection lost)
 
 
 
@@ -133,16 +134,13 @@ NOTES: 5 most major use cases
 **Primary actor(s)**: User, OpenAI API
    
 **Main success scenario**:
-1. User clicks the “Search for a Note” button
-2. System displays a text input field 
-3. User types in their query and clicks the “Search” button
-4. System sends query string to OpenAI API, which returns the vectorized query 
-5. System displays a list of notes, sorted by how much they match the query.
+1. User types in their query visible in the main screen or template screen
+2. User presses the "Search" button
+3. System sends query string to OpenAI API, which returns the vectorized query 
+4. System displays a list of notes, sorted by how much their vector embeddings match the one of the query.
 
 **Failure scenario(s)**:
-- 4a. No matching notes
-	- 4a1. System simply does not display any notes [For now: the system will always return all notes, only sorted by their resemblance to the search query]
-- 4b. Available notes not fetched
+- 3b. Available notes not fetched
 	- 4b1. System displays an error message stating the error code and reason the fetch failed, such as connection loss. 
 
 
@@ -152,24 +150,25 @@ NOTES: 5 most major use cases
 #### Use Case 3: [Create A Note Template]
 
 
-**Description**: The user creates a note template by adding and deleting components to their desire (e.g. text field, date field, number field).
+**Description**: The user creates a note template by adding and deleting components to their desire (e.g. text field, date field, signature field).
 
 
 **Primary actor(s)**: User
    
 **Main success scenario**:
-1. User clicks the “Create Note” button and selects the template category.
-2. System displays a default note template, along with buttons to create new fields or delete fields
-3. User customizes the note template to their desire by adding/removing/setting default values/moving the input fields around the space available. The tag field is not removable and there must be at least one content field in the template, else the user cannot remove fields.
-4. User clicks the “Create” confirmation button
-5. System saves the note template and displays a confirmation message
-
+1. User presses the Create icon button.
+2. System displays the creation screen.
+3. User presses the Create a new template button.
+4. System displays the note creation screen, set to template mode: With a title field, tag field and a button to add content fields.
+5. User customizes the note template to their desire by adding/removing the input fields around the space available. The tag and title fields are not removable.
+6. User clicks the “Create” confirmation button
+7. System saves the note template and navigates back to the creation screen where the template is visible
 
 **Failure scenario(s)**:
-- 5a. Creation of note template failed (server-side)
-    - 5a1. System displays error message stating the reason and tells the user to retry
-- 5b. Creation of note template failed (user-error)
-    - 5b1. System displays error message, pointing to areas in the template that the user may need to fix
+- 7a. Creation of note template failed (server-side)
+    - 7a1. System displays error message stating the reason and tells the user to retry
+- 7b. Creation of note template failed (user-error)
+    - 7b1. System displays error message, pointing to areas in the template that the user may need to fix. This can be: no title given, no tags given, no content fields added.
 
 
 
@@ -187,8 +186,8 @@ NOTES: 5 most major use cases
    
 **Main success scenario**:
 1. User clicks the “Create Workspace” button
-2. System displays input fields needed to create a new workspace (e.g. name and description)
-3. User fills in the required field: name
+2. System displays input an input field for the name of the workspace to be created
+3. User fills in the required name field.
 4. A create button becomes available to the user
 5. User clicks the “Create” confirmation button
 6. System receives the input and creates the corresponding workspace with the user being the workspace manager
@@ -196,8 +195,11 @@ NOTES: 5 most major use cases
 
 
 **Failure scenario(s)**:
-- 3a. Workspace name entered by the user is already taken by another workspace
-    - 3a1. System refuses to create the workspace (no page update)
+- 5a. Workspace name entered by the user is already taken by another workspace
+    - 5a1. System refuses to create the workspace (no navigation away from the page)
+    - 5a2. A relevant error message is displayed
+- 5b. Could not create workspace (server side issue)
+    - 5a1. System does not navigate away from the workspace creation screen and the relevant error message is displayed.
 
 
 
@@ -216,20 +218,16 @@ NOTES: 5 most major use cases
 **Primary actor(s)**: Workspace Member
    
 **Main success scenario**:
-1. Workspace Member navigates into any of the workspaces they are in
-2. System displays the workspace
-3. Workspace Member clicks the “Chat” button
-4. System displays the "Chat" screen
-5. Workspace Member inputs text and clicks the send button
-6. The "send" button becomes enabled
-7. User presses the "send" button
-8. System receives the input and displays it on the screen of every user in the workspace
-
+1. Workspace Member navigates into the chat screen of any of the workspaces they are in
+2. System displays the chat screen
+3. Workspace Member inputs text and clicks the send button
+4. System receives the input and displays it on the screen of every user in the workspace
 
 **Failure scenario(s)**:
-- 8a. The message couldn’t be sent
-    - 8a1. System displays error message indicating the error code and reason
-    - 8a2. User tries to send the message again after fixing the error (ex. connection error)
+- 3a. The message couldn’t be sent (server issue)
+    - 3a1. System displays error message indicating the error code and reason
+- 3b. The message was empty, or composed just of spaces
+    - 3b1. The chat message is not sent.
 
 
 
