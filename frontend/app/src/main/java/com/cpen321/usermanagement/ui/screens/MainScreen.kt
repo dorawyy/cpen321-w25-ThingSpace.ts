@@ -265,13 +265,15 @@ private fun MainBody(
             onQueryChange = actions.onQueryChange,
             query = query
         )
+
         if (noteErrorMessage != null){
             val spacing = LocalSpacing.current
+            Spacer(modifier = Modifier.height(spacing.medium))
             Card(
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.errorContainer
                 ),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(.9f)
             ) {
                 Text(
                     text = noteErrorMessage,
@@ -282,6 +284,7 @@ private fun MainBody(
             }
             Spacer(modifier = Modifier.height(spacing.medium))
         }
+
         NoteDisplayList(
             onNoteClick = actions.onNoteClick,
             notes = notes,

@@ -10,6 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,6 +25,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
@@ -36,13 +41,8 @@ import androidx.compose.ui.text.font.FontWeight
 import com.cpen321.usermanagement.R
 import com.cpen321.usermanagement.data.remote.dto.Note
 import com.cpen321.usermanagement.data.remote.dto.NoteType
-import com.cpen321.usermanagement.ui.components.MessageSnackbar
-import com.cpen321.usermanagement.ui.components.MessageSnackbarState
-import com.cpen321.usermanagement.ui.viewmodels.MainUiState
 import com.cpen321.usermanagement.ui.viewmodels.TemplateViewModel
-import com.cpen321.usermanagement.ui.theme.LocalFontSizes
 import com.cpen321.usermanagement.ui.theme.LocalSpacing
-import com.cpen321.usermanagement.ui.components.MainBottomBar
 import com.cpen321.usermanagement.ui.components.NoteDisplayList
 import com.cpen321.usermanagement.ui.components.SearchBar
 import com.cpen321.usermanagement.ui.components.TemplateBottomBar
@@ -60,7 +60,8 @@ data class TemplateActions(
     val onQueryChange: (String) -> Unit,
     val onCreateNoteClick: () -> Unit,
     val onCreateTemplateClick: ()->Unit,
-    val onNoteEditClick: (String) -> Unit
+    val onNoteEditClick: (String) -> Unit,
+    val onProfileClick: () -> Unit,
 )
 
 @Composable
@@ -70,6 +71,7 @@ fun TemplateScreen(
     featureActions: FeatureActions
 ) {
     val fetching by templateViewModel.fetching.collectAsState()
+    val noteErrorMessage by templateViewModel.noteErrorMessage.collectAsState()
 
     BackHandler { featureActions.navs.navigateToMainTagReset(featureActions.state.getWorkspaceId()) }
 
@@ -97,14 +99,15 @@ fun TemplateScreen(
         ) },
         onQueryChange = {query:String -> featureActions.state.setSearchQuery(query)},
         onCreateNoteClick = { featureActions.navs.navigateToNoteCreation(NoteType.CONTENT) },
-        onCreateTemplateClick = { featureActions.navs.navigateToNoteCreation(NoteType.TEMPLATE)}
+        onCreateTemplateClick = { featureActions.navs.navigateToNoteCreation(NoteType.TEMPLATE)},
+        onProfileClick = onProfileClick
     )
 
     TemplateContent(
-        onProfileClick = onProfileClick,
         actions = actions,
         templates = templateViewModel.getNotesTitlesFound(0),
         fetching = fetching,
+        noteErrorMessage = noteErrorMessage,
         wsname = templateViewModel.getWorkspaceName(),
         query = featureActions.state.getSearchQuery()
     )
@@ -112,7 +115,7 @@ fun TemplateScreen(
 
 @Composable
 private fun TemplateContent(
-    onProfileClick: () -> Unit,
+    noteErrorMessage: String?,
     actions: TemplateActions,
     templates:List<Note>,
     query:String,
@@ -123,7 +126,7 @@ private fun TemplateContent(
     Scaffold(
         modifier = modifier,
         topBar = {
-            MainTopBar(onProfileClick = onProfileClick)
+            MainTopBar(onProfileClick = actions.onProfileClick)
         },
         bottomBar = {
             TemplateBottomBar(
@@ -144,6 +147,7 @@ private fun TemplateContent(
             TemplateBody(
             paddingValues = paddingValues,
                 actions = actions,
+                noteErrorMessage = noteErrorMessage,
             templates = templates,
             wsname = wsname,
             query = query)
@@ -213,6 +217,7 @@ private fun TemplateBody(
     actions: TemplateActions,
     templates:List<Note>,
     wsname:String,
+    noteErrorMessage: String?,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -250,6 +255,7 @@ private fun TemplateBody(
                 .padding(start = spacing.medium, top = spacing.medium, bottom = spacing.small)
                 .align(Alignment.Start)
         )
+        TemplateSearchErrorMessage(noteErrorMessage) // will asses whether to display itself or not
         TemplateDisplayList(
             templates = templates,
             onTitleClick = actions.onNoteClick,
@@ -271,5 +277,29 @@ private fun TemplateLabel(
         maxLines = 2,
         softWrap = true
     )
+}
+
+@Composable
+private fun TemplateSearchErrorMessage(
+    noteErrorMessage:String?
+){
+    if (noteErrorMessage != null){
+        val spacing = LocalSpacing.current
+        Spacer(modifier = Modifier.height(spacing.medium))
+        Card(
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.errorContainer
+            ),
+            modifier = Modifier.fillMaxWidth(.9f)
+        ) {
+            Text(
+                text = noteErrorMessage,
+                color = MaterialTheme.colorScheme.onErrorContainer,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(spacing.medium)
+            )
+        }
+        Spacer(modifier = Modifier.height(spacing.medium))
+    }
 }
 
