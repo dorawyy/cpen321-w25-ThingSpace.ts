@@ -15,7 +15,7 @@
 | 25.10.2025 | All | Cleaned up doc and implemented feedback from M2 |
 | 26.10.2025 | 4.6 | Added sequence diagrams for components |
 | 10.11.2025 | 3.5, 3.7 | Revised the formal use case specifications to the state of the app in M4. This is to provide a reference for testing
-| 27.11.2025 | 3.* | Revised the entire requirement specification. This is first to resolve the dilema the croup had between copying notes and creating from template - now bothoptions are available. Create from template allows to create a note from template, Copy copies template as template and notes as notes. Secondly, since we do not work workspace manager to leave the workspace, we had to create two more actors for workspace member and workspace regular member and rework the inheritance between them. Formal use case specification changed so that every use case has separate error handling for client-side (user) errors, and server-side issues.
+| 27.11.2025 | 3.* | Revised the entire requirement specification. This is first to resolve the dilema the croup had between copying notes and creating from template - now bothoptions are available. Create from template allows to create a note from template, Copy copies template as template and notes as notes. Secondly, since we do not want workspace manager to leave the workspace, we had to create two more actors for workspace member and workspace regular member and rework the inheritance between them. Formal use case specification changed so that every use case has separate error handling for client-side (user) errors, and server-side issues. A lot of consistency changes as well.
 ---
 
 
@@ -23,7 +23,7 @@
 
 
 In short, we are aiming to create an application that would allow
-users to store all their (non-sensitive) information in one place and in a way that is easy to update, access and search. The app itself would not incorporate dedicated features such as notes, todo-lists etc. Instead one would be able to store information in a general note, which would be composed of numerous input fields: text, datetime etc. Users will be able to create templates for their own formats of notes and join workspaces where they can share their notes with other users.
+users to store all their (non-sensitive) information in one place and in a way that is easy to update, access and search. The app itself would not incorporate dedicated features such as notes, todo-lists etc. Instead one would be able to store information in a general note, which would be composed of numerous input fields: text, datetime etc. Users will be able to create templates for their own formats of notes and join workspaces where they can create notes that will be shared with other users.
 The target audience is the general public. If one has a large amount of different kinds of notes, todos or saved locations, they can use this app as a "general memory system" providing them one place to retrieve and update their entire collection of notes. However, we are especially aiming for groups of people who want to collaborate on their goal and manage this collaboration in one place and in a very customised manner. Existing apps do not fully provide such functionality (Notion: missing todos/notifications/chat, WhatsApp: files stored on everyone's machines, not able to see history prior to joining the communities, Discord: file sharing limit, Facebook: membership limits)
 
 
@@ -31,7 +31,7 @@ The target audience is the general public. If one has a large amount of differen
 
 
 ### **3.1. List of Features**
-1. **[Manage Notes]**: A user can create, update, read and delete their own notes as well as share it with other users and workspaces they are in.
+1. **[Manage Notes]**: A user can create, update, read and delete their own notes as well as move them to other workspaces for other people to see
 2. **[Retrieve Notes]**: A user can search through their notes and filter through the notes they see by their tags. The searching will be semantic, which means cases when the user does not type exactly the content of the note would be handled and the note will still be displayed.
 3. **[Collaborate]**: A User can create workspaces in which case they become their managers. Inside a workspace, notes can be posted and an associated chat can be used. The owner is able to invite people to the workspace by an email address, and a push notification will be sent to those invited notifying them. Notes in the workspace are visible to all Users who accepted the invitation. Naturally, the manager can update their workspace, or even delete it, as well as ban certain users.
 4. **[Customize Format]**: Users would be able create and manage their own formats of notes, known as templates. These can include any combination of text, signature and date fields, with the condition of at least one field, one tag and a title. They are then able to use the templates to make notes with a pre-created layout of fields.
@@ -61,25 +61,25 @@ The target audience is the general public. If one has a large amount of differen
 
 
 - Use cases for feature 2: Retrieve Notes
-5. **Search Notes**: A user can search for notes matching a given prompt, and is provided with a list of notes.
-6. **Filter Notes**: After retrieving search results, a user can filter the results by certain tags and creation/last edit dates. 
+6. **Search Notes**: A user can search for notes matching a given prompt, and is provided with a list of notes in order of similarity (top results will be notes that most match the query).
+7. **Filter Notes**: After retrieving search results, a user can filter the results by certain tags and creation/last edit dates. 
 
 
 - Use cases for feature 3: Collaborate
-7. **Create Workspace**: A user can create a workspace and become the manager of it.
-8. **Join Workspace**: A user can join the workspace they are invited to or reject the invitation
-9. **Invite to Workspace**: Any user that is part of a workspace can invite other users to the workspace. The invited user will be sent a push notification.
-10. **Send Chat Message**: A user can send chat messages to other users or the workspaces that they are part of. A chat message will appear on chat screens of otherusers in the workspace without a need to refresh.
-11. **Update Workspace**: The workspace manager can update workspace metadata, like title, descriptions, etc. 
-12. **Leave Workspace**: A user can leave any workspace that they are part of.
-13. **Delete Workspace**: The workspace manager can delete the workspace and all associated data.
-14. **Ban users**: The workspace owner can ban a user, kicking them out and preventing them from joining in the future. 
+8. **Create Workspace**: A user can create a workspace and become the manager of it.
+9. **Join Workspace**: A user can join the workspace if they are invited.
+10. **Invite to Workspace**: Any user that is part of a workspace can invite other users to the workspace. The invited user will be sent a push notification.
+11. **Send Chat Message**: A user can send chat messages to other users or the workspaces that they are part of. A chat message will appear on chat screens of other users in the workspace without a need to refresh.
+12. **Update Workspace**: The workspace manager can update workspace metadata, like title, descriptions, etc. 
+13. **Leave Workspace**: A user can leave any workspace that they are part of.
+14. **Delete Workspace**: The workspace manager can delete the workspace and all associated data.
+15. **Ban users**: The workspace owner can ban a user, kicking them out and preventing them from joining in the future. 
 
 
 - Use cases for feature 4: Customize Format
-15. **Create Template**: A user can create a note template, consisting of components like title, tags, and custom fields like "Due date" for a note template.
-16. **Update Template**: A user can update their templates, editing the components. 
-17. **Delete Template**: A user can delete their templates, and will not be able to use it for future notes. 
+16. **Create Template**: A user can create a note template, consisting of components like title, tags, and custom fields like "Due date" for a note template.
+17. **Update Template**: A user can update their templates, editing the components. 
+18. **Delete Template**: A user can delete their templates, and will not be able to use it for future notes. 
 
 - In addition to that: sign up, sign in, sign out and delete account use cases from M1.
 
@@ -118,7 +118,7 @@ NOTES: 5 most major use cases
 
 **Failure scenario(s)**:
 - 7a. The note could not be created (client side, missing inputs)
-    - 7a1. System displays a warning message prompting the user to at least create one field, add at least one tag, or set the title,depending on which of the three is missing
+    - 7a1. System displays a warning message prompting the user to at least create one field, add at least one tag, or set the title, depending on which of the three is missing
 - 7a. The note could not be created (server side)
     - 7a1. System displays error message stating that the note could not be created as well as the reason for the failure (e.g. connection lost)
 
@@ -264,115 +264,232 @@ NOTES: 5 most major use cases
 1. **Users**
     - **Purpose**: Manages all functionality relating to users, including creation, tracking metadata, etc. Users are a good component as each user must store some of their own data.
     - **Interfaces**:
-        1. **signIn** - `POST /auth/signin (idToken: String): Result<AuthData>`
-            - **Purpose**: Authenticates an existing user with Google OAuth and returns authentication data including JWT token and user information. This interface is used to log in users who already have an account in the system.
+        1. **signIn**
+            - `POST /auth/signin`
+            - **Body**: `{ "idToken": string }`
+            - **Response**: `200 OK { token, user }` | `401 Unauthorized`
+            - **Purpose**: Authenticates an existing user with Google OAuth and returns JWT token and user information.
 
-        2. **signUp** - `POST /auth/signup (idToken: String): Result<AuthData>`
-            - **Purpose**: Creates a new user account using Google OAuth credentials and returns authentication data with JWT token and user information. Also automatically creates a personal workspace for the new user. This interface handles the initial registration flow for new users.
+        2. **signUp**
+            - `POST /auth/signup`
+            - **Body**: `{ "idToken": string }`
+            - **Response**: `201 Created { token, user }` | `409 Conflict`
+            - **Purpose**: Creates a new user account using Google OAuth. Also automatically creates a personal workspace for the new user.
 
-        3. **getProfile** - `GET /user/profile: Result<User>`
-            - **Purpose**: Retrieves the authenticated user's profile information including name, bio, profile picture, and metadata. This interface allows users to access their own profile data.
+        3. **getProfile**
+            - `GET /user/profile`
+            - **Headers**: `Authorization: Bearer {token}`
+            - **Response**: `200 OK { user }` | `404 Not Found`
+            - **Purpose**: Retrieves the authenticated user's profile information including name, bio, profile picture, and metadata.
 
-        4. **updateProfile** - `PUT /user/profile (name: String, bio: String?): Result<User>`
-            - **Purpose**: Updates the authenticated user's profile information such as name and bio. This interface allows users to modify their personal information.
+        4. **updateProfile**
+            - `PUT /user/profile`
+            - **Headers**: `Authorization: Bearer {token}`
+            - **Body**: `{ "profile": { "name"?: string, "description"?: string, "imagePath"?: string } }`
+            - **Response**: `200 OK { user }` | `400 Bad Request`
+            - **Purpose**: Updates the authenticated user's profile information such as name and bio.
 
-        5. **deleteProfile** - `DELETE /user/profile: Result<Unit>`
-            - **Purpose**: Permanently deletes the authenticated user's account and all associated data, including user images. This interface handles account deletion requests and cleanup.
+        5. **deleteProfile**
+            - `DELETE /user/profile`
+            - **Headers**: `Authorization: Bearer {token}`
+            - **Response**: `200 OK` | `401 Unauthorized`
+            - **Purpose**: Permanently deletes the authenticated user's account and all associated data.
 
-        6. **updateFcmToken** - `POST /user/fcm-token (fcmToken: String): Result<User>`
-            - **Purpose**: Updates the user's Firebase Cloud Messaging token for push notification delivery. This interface is called when the app receives a new FCM token.
+        6. **updateFcmToken**
+            - `POST /user/fcm-token`
+            - **Headers**: `Authorization: Bearer {token}`
+            - **Body**: `{ "fcmToken": string }`
+            - **Response**: `200 OK` | `400 Bad Request`
+            - **Purpose**: Updates the user's Firebase Cloud Messaging token for push notification delivery.
 
-        7. **UserModel.findById(userId: ObjectId): User**
+        7. **UserModel.findById** (Internal Database Method)
+            ```typescript
+            static async findById(userId: ObjectId): Promise<User | null>
+            ```
             - **Purpose**: Exposes user retrieval by ID. Called by WorkspaceService.inviteMember() and getWorkspaceMembers() to retrieve user information for displaying members and sending notifications.
 
-        8. **UserModel.findByIds(userIds: List<ObjectId>): List<User>**
+        8. **UserModel.findByIds** (Internal Database Method)
+            ```typescript
+            static async find({ _id: { $in: userIds } }): Promise<User[]>
+            ```
             - **Purpose**: Exposes user retrieval for multiple IDs. Called by WorkspaceService.getWorkspaceMembers() to fetch all member users for a workspace.
 
-        9. **UserModel.find(filter): List<User>**
+        9. **UserModel.find** (Internal Database Method)
+            ```typescript
+            static async find(filter: FilterQuery<User>): Promise<User[]>
+            ```
             - **Purpose**: Exposes user search functionality. Called by NoteService.getAuthors() to retrieve user information for notes, mapping note IDs to their author user objects.
 
 2. **Notes**
     - **Purpose**: The notes component manages all note items. This includes creation, processing, and search retrieval. This functionality can be effectively bucketed together, and other components can interact with these notes, maintaining a separation of concerns.
     - **Interfaces**:
-        1. **getNote** - `GET /notes/{id}: Result<Note>`
-            - **Purpose**: Retrieves a specific note by its ID, including all fields, tags, and metadata. This interface is used to fetch individual note details for display or editing.
+        1. **getNote**
+            - `GET /notes/{id}`
+            - **Headers**: `Authorization: Bearer {token}`
+            - **Response**: `200 OK { note }` | `403 Forbidden` | `404 Not Found`
+            - **Purpose**: Retrieves a specific note by its ID, including all fields, tags, and metadata.
 
-        2. **createNote** - `POST /notes (workspaceId: String, fields: List<Field>, noteType: NoteType, tags: List<String>): Result<Unit>`
-            - **Purpose**: Creates a new note in the specified workspace with the provided content, type, and tags. This interface handles note creation and generates embeddings for semantic search.
+        2. **createNote**
+            - `POST /notes`
+            - **Headers**: `Authorization: Bearer {token}`
+            - **Body**: `{ "workspaceId": string, "fields": array, "noteType": "CONTENT"|"CHAT"|"TEMPLATE", "tags": string[] }`
+            - **Response**: `201 Created { noteId }` | `400 Bad Request` | `403 Forbidden`
+            - **Purpose**: Creates a new note in the specified workspace. Generates embeddings for semantic search.
 
-        3. **updateNote** - `PUT /notes/{id} (tags: List<String>, fields: List<Field>): Result<Unit>`
-            - **Purpose**: Updates an existing note's content and tags. This interface allows users to modify notes they own.
+        3. **updateNote**
+            - `PUT /notes/{id}`
+            - **Headers**: `Authorization: Bearer {token}`
+            - **Body**: `{ "tags": string[], "fields": array }`
+            - **Response**: `200 OK` | `403 Forbidden` | `404 Not Found`
+            - **Purpose**: Updates an existing note's content and tags. Only the note owner can update.
 
-        4. **deleteNote** - `DELETE /notes/{id}: Result<Unit>`
-            - **Purpose**: Permanently deletes a note. Only the note owner can delete their notes. 
+        4. **deleteNote**
+            - `DELETE /notes/{id}`
+            - **Headers**: `Authorization: Bearer {token}`
+            - **Response**: `200 OK` | `403 Forbidden` | `404 Not Found`
+            - **Purpose**: Permanently deletes a note. Only the note owner can delete.
 
-        5. **findNotes** - `GET /notes?workspaceId={id}&noteType={type}&tags={tags}&query={query}: Result<List<Note>>`
-            - **Purpose**: Searches for notes within a workspace using filters (type, tags) and performs semantic similarity search using embeddings if the query string is non-empty. Returns a ranked list of notes sorted by relevance. Requires the user to be a workspace member.
+        5. **findNotes**
+            - `GET /notes?workspaceId={id}&noteType={type}&tags={tags}&query={query}`
+            - **Headers**: `Authorization: Bearer {token}`
+            - **Query**: `workspaceId (required), noteType (required), tags (optional), query (optional)`
+            - **Response**: `200 OK { notes[] }` | `400 Bad Request` | `403 Forbidden`
+            - **Purpose**: Searches for notes within a workspace using filters and semantic similarity search.
 
-        6. **shareNoteToWorkspace** - `POST /notes/{id}/share (workspaceId: String): Result<Unit>`
-            - **Purpose**: Moves an existing note to a different workspace. Only the note owner can share their notes, and they must be a member of the target workspace. 
+        6. **moveNoteToWorkspace**
+            - `POST /notes/{id}/share`
+            - **Headers**: `Authorization: Bearer {token}`
+            - **Body**: `{ "workspaceId": string }`
+            - **Response**: `200 OK { note }` | `403 Forbidden` | `404 Not Found`
+            - **Purpose**: Moves an existing note to a different workspace.
 
-        7. **copyNoteToWorkspace** - `POST /notes/{id}/copy (workspaceId: String): Result<Unit>`
-            - **Purpose**: Creates a copy of a note in a different workspace. This is for creating notes from templates.
+        7. **copyNoteToWorkspace**
+            - `POST /notes/{id}/copy`
+            - **Headers**: `Authorization: Bearer {token}`
+            - **Body**: `{ "workspaceId": string }`
+            - **Response**: `200 OK { note }` | `403 Forbidden` | `404 Not Found`
+            - **Purpose**: Creates a copy of a note in a different workspace. Used for creating notes from templates.
 
 3. **Workspaces**
     - **Purpose**: The workspace contains its own general information, as well as a reference to member users and included notes. This component would be responsible for forwarding push notifications to member users on invite, and the banning functionality.
     - **Interfaces**:
-        1. **createWorkspace** - `POST /workspace (name: String, profilePicture: String?, description: String?): Result<String>`
-            - **Purpose**: Creates a new workspace with the specified name, description, and profile picture. The creator automatically becomes the owner and a member.
+        1. **createWorkspace**
+            - `POST /workspace`
+            - **Headers**: `Authorization: Bearer {token}`
+            - **Body**: `{ "name": string, "profilePicture"?: string, "description"?: string }`
+            - **Response**: `201 Created { workspaceId }` | `409 Conflict`
+            - **Purpose**: Creates a new workspace. The creator automatically becomes the owner and a member.
 
-        2. **getWorkspace** - `GET /workspace/{id}: Result<Workspace>`
-            - **Purpose**: Retrieves workspace details including name, description, members, and metadata. Requires the user to be a workspace member.
+        2. **getWorkspace**
+            - `GET /workspace/{id}`
+            - **Headers**: `Authorization: Bearer {token}`
+            - **Response**: `200 OK { workspace }` | `403 Forbidden` | `404 Not Found`
+            - **Purpose**: Retrieves workspace details. Requires the user to be a workspace member.
 
-        3. **getWorkspacesForUser** - `GET /workspace/user: Result<List<Workspace>>`
-            - **Purpose**: Returns all workspaces that the authenticated user is a member of, sorted by most recently updated. 
+        3. **getWorkspacesForUser**
+            - `GET /workspace/user`
+            - **Headers**: `Authorization: Bearer {token}`
+            - **Response**: `200 OK { workspaces[] }` | `401 Unauthorized`
+            - **Purpose**: Returns all workspaces that the authenticated user is a member of, sorted by most recently updated.
 
-        4. **getWorkspaceMembers** - `GET /workspace/{id}/members: Result<List<User>>`
-            - **Purpose**: Retrieves the list of all users who are members of the specified workspace. 
+        4. **getWorkspaceMembers**
+            - `GET /workspace/{id}/members`
+            - **Headers**: `Authorization: Bearer {token}`
+            - **Response**: `200 OK { members[] }` | `403 Forbidden` | `404 Not Found`
+            - **Purpose**: Retrieves the list of all users who are members of the specified workspace.
 
-        5. **inviteMember** - `POST /workspace/{id}/members (userId: String): Result<Unit>`
-            - **Purpose**: Adds a user to the workspace as a member. Any existing workspace member can invite users. Sends a push notification to the invited user.
+        5. **inviteMember**
+            - `POST /workspace/{id}/members`
+            - **Headers**: `Authorization: Bearer {token}`
+            - **Body**: `{ "userId": string }`
+            - **Response**: `200 OK` | `403 Forbidden` | `404 Not Found` | `409 Conflict`
+            - **Purpose**: Adds a user to the workspace as a member. Sends a push notification to the invited user.
 
-        6. **leaveWorkspace** - `POST /workspace/{id}/leave: Result<Unit>`
-            - **Purpose**: Removes the authenticated user from the workspace. Cannot be used by the workspace owner, who must delete the workspace instead. 
+        6. **leaveWorkspace**
+            - `POST /workspace/{id}/leave`
+            - **Headers**: `Authorization: Bearer {token}`
+            - **Response**: `200 OK` | `403 Forbidden` | `404 Not Found`
+            - **Purpose**: Removes the authenticated user from the workspace. Cannot be used by the workspace owner.
 
-        7. **banMember** - `DELETE /workspace/{id}/members/{userId}: Result<Unit>`
-            - **Purpose**: Bans a user from the workspace. Only the workspace owner can ban members. Removes the user from the member list and adds them to the banned list, preventing future invitations. Cannot ban the workspace owner.
+        7. **banMember**
+            - `DELETE /workspace/{id}/members/{userId}`
+            - **Headers**: `Authorization: Bearer {token}`
+            - **Response**: `200 OK` | `403 Forbidden` | `404 Not Found`
+            - **Purpose**: Bans a user from the workspace. Only the workspace owner can ban members.
 
-        8. **updateWorkspaceProfile** - `PUT /workspace/{id} (name: String, description: String?): Result<Unit>`
+        8. **updateWorkspaceProfile**
+            - `PUT /workspace/{id}`
+            - **Headers**: `Authorization: Bearer {token}`
+            - **Body**: `{ "name"?: string, "description"?: string }`
+            - **Response**: `200 OK` | `403 Forbidden` | `404 Not Found`
             - **Purpose**: Updates the workspace name and description.
 
-        9. **updateWorkspacePicture** - `PUT /workspace/{id}/picture (profilePicture: String): Result<Unit>`
-            - **Purpose**: Updates the workspace profile picture. 
+        9. **updateWorkspacePicture**
+            - `PUT /workspace/{id}/picture`
+            - **Headers**: `Authorization: Bearer {token}`
+            - **Body**: `{ "profilePicture": string }`
+            - **Response**: `200 OK` | `403 Forbidden` | `404 Not Found`
+            - **Purpose**: Updates the workspace profile picture.
 
-        10. **deleteWorkspace** - `DELETE /workspace/{id}: Result<Unit>`
-            - **Purpose**: Permanently deletes a workspace and all associated notes. Only the workspace owner can delete a workspace. 
+        10. **deleteWorkspace**
+            - `DELETE /workspace/{id}`
+            - **Headers**: `Authorization: Bearer {token}`
+            - **Response**: `200 OK` | `403 Forbidden` | `404 Not Found`
+            - **Purpose**: Permanently deletes a workspace and all associated notes. Only the workspace owner can delete.
 
-        11. **getAllTags** - `GET /workspace/{id}/tags: Result<List<String>>`
-            - **Purpose**: Retrieves all tags used within notes in the workspace. These are displayed to allow filtering for search. 
+        11. **getAllTags**
+            - `GET /workspace/{id}/tags`
+            - **Headers**: `Authorization: Bearer {token}`
+            - **Response**: `200 OK { tags[] }` | `403 Forbidden` | `404 Not Found`
+            - **Purpose**: Retrieves all tags used within notes in the workspace for filtering.
 
-        12. **pollForNewMessages** - `GET /workspace/{id}/poll: Result<Boolean>`
-            - **Purpose**: Polls for new chat messages in the workspace by checking if messages were created within the last polling interval. Returns true if new messages exist, false otherwise.
+        12. **pollForNewMessages**
+            - `GET /workspace/{id}/poll`
+            - **Headers**: `Authorization: Bearer {token}`
+            - **Response**: `200 OK { hasNewMessages: boolean }` | `403 Forbidden`
+            - **Purpose**: Polls for new chat messages in the workspace.
 
-        13. **getMembershipStatus** - `GET /workspace/{id}/membership/{userId}: Result<WsMembershipStatus>`
-            - **Purpose**: Returns the membership status of a user in a workspace (OWNER, MEMBER, BANNED, or NOT_MEMBER).
+        13. **getMembershipStatus**
+            - `GET /workspace/{id}/membership/{userId}`
+            - **Headers**: `Authorization: Bearer {token}`
+            - **Response**: `200 OK { status: "OWNER"|"MEMBER"|"BANNED"|"NOT_MEMBER" }` | `404 Not Found`
+            - **Purpose**: Returns the membership status of a user in a workspace.
 
-        14. **WorkspaceModel.find(filter): List<Workspace>**
+        14. **WorkspaceModel.find** (Internal Database Method)
+            ```typescript
+            static async find(filter: FilterQuery<Workspace>): Promise<Workspace[]>
+            ```
             - **Purpose**: Exposes workspace search functionality. Called by UserController.deleteProfile() to find all workspaces owned by a user before deleting them.
 
-        15. **WorkspaceModel.updateMany(filter, update): void**
+        15. **WorkspaceModel.updateMany** (Internal Database Method)
+            ```typescript
+            static async updateMany(
+              filter: FilterQuery<Workspace>,
+              update: UpdateQuery<Workspace>
+            ): Promise<UpdateResult>
+            ```
             - **Purpose**: Exposes batch workspace update functionality. Called by UserController.deleteProfile() to remove the user from all workspaces where they are a member but not the owner.
 
-        16. **WorkspaceModel.findById(workspaceId: String): Workspace**
-            - **Purpose**: Exposes workspace retrieval by ID. Called by NoteService methods to verify workspace existence and membership before allowing note operations. Used in getNotes(), shareNoteToWorkspace(), and copyNoteToWorkspace().
+        16. **WorkspaceModel.findById** (Internal Database Method)
+            ```typescript
+            static async findById(workspaceId: string): Promise<Workspace | null>
+            ```
+            - **Purpose**: Exposes workspace retrieval by ID. Called by NoteService methods to verify workspace existence and membership before allowing note operations. Used in getNotes(), moveNoteToWorkspace(), and copyNoteToWorkspace().
 
 
 **External Interfaces Used**:
-1. **OpenAIClient.embeddings.create(model: String, input: String): EmbeddingResponse**
-    - **Purpose**: Called by NoteService.createNote() and getNotes() to generate vector embeddings for note/query content using OpenAI's text-embedding-3-large model. The embeddings are stored with each note for semantic search functionality.
+1. **OpenAI Embeddings API**
+    - `POST https://api.openai.com/v1/embeddings`
+    - **Headers**: `Authorization: Bearer {openai_api_key}`
+    - **Body**: `{ "model": "text-embedding-3-large", "input": string }`
+    - **Response**: `200 OK { data: [{ embedding: number[] }] }`
+    - **Purpose**: Generates vector embeddings for note/query content for semantic search functionality.
 
-2. **FirebaseAdmin.messaging().send(message: Message): Promise<String>**
-    - **Purpose**: Called by sendNotification() to deliver push notifications to mobile devices. Used when users are invited to workspaces, sending notification data including workspace information and inviter details.
+2. **Firebase Cloud Messaging API**
+    - **Method**: `admin.messaging().send(message)`
+    - **Message**: `{ "token": string, "notification": { "title": string, "body": string }, "data": { workspaceId, workspaceName, inviterName } }`
+    - **Response**: `Promise<string>` (message ID)
+    - **Purpose**: Delivers push notifications to mobile devices when users are invited to workspaces.
    
 
 ### **4.2. Databases**
