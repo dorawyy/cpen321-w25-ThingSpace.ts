@@ -246,5 +246,4 @@ export class NotesController {
       res.status(500).json({ error: error instanceof Error ? error.message : 'Failed to retrieve notes' });
     }
   }
-
 }
