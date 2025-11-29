@@ -524,9 +524,9 @@ NOTES: 5 most major use cases
     - **Purpose**: Conducting automated frontend end-to-end tests
     - **Reason**: The UI used is a Jetpack Compose UI, as such it cannot be tested with espresso etc., but requires the dedicated testing module, Uiautomator needed to be added to manage permission pop-ups and automatic sign-in
 
-5. **[Jest + ?]**
+5. **[Jest]**
     - **Purpose**: Conduct automated backend integration tests
-    - **Reason**:
+    - **Reason**: Provides mocking, assertion and test setup functionality for TypeScript
  
 ### **4.5. Dependencies Diagram**
 ![image info](./graphics/backendD.png)
@@ -536,13 +536,13 @@ The dependency of Users on interfaces from other components is because user dele
 
 ### **4.6. Use Case Sequence Diagram (5 Most Major Use Cases)**
 1. [**[CREATE NOTE]**](#uc1)\
-![image info](./graphics/CreateNote.png)
+![image info](./graphics/CreateNote.jpg)
 
 2. [**[SEARCH NOTE]**](#uc2)\
 ![image info](./graphics/SearchNotes.png)
 
 3. [**[CREATE A NOTE TEMPLATE]**](#uc3)\
-![image info](./graphics/NoteTemplate.png)
+![image info](./graphics/CreateNoteTemplate.jpg)
 
 4. [**[CREATE WORKSPACE]**](#uc4)\
 ![image info](./graphics/CreateWorkspace.png)
