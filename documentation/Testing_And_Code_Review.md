@@ -4,6 +4,7 @@
 
 | **Change Date** | **Modified Sections** | **Rationale** |
 |-----------------|-----------------------|---------------|
+| 29.11.2025 | 2.1.1 | Updated backend test chart with correct line numbers after refactor, listed specific mocked components |
 | 27.11.2025 | 4.1 | More detailed setup instructions|
 | 27.11.2025 | 3.2, 4.* | Moved the frontend nonfunctional from frontend to nonfunctional |
 | 28.11.2025 | 4.2 | Updated the specification of TestNotes after making changes to template functionality |
@@ -18,143 +19,69 @@
 
 ##### Notes API
 
-+---------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| Interface                 | Describe Group Location, No Mocks                                   | Describe Group Location, With Mocks                                | Mocked Components                                    |
-+===========================+=====================================================================+====================================================================+======================================================+
-| POST `/api/notes`         | `backend/src/__tests__/\                                            | `backend/src/__tests__/\                                           | `noteService.createNote`,\                           |
-|                           | unmocked/notes.normal.\                                             | mocked/notes.mocked.\                                              | OpenAI embeddings client                             |
-|                           | test.ts#L40`                                                        | test.ts#L51`                                                       |                                                      |
-+---------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| PUT `/api/notes/:id`      | `#L282`                                                             | `#L202`                                                            | `noteService.updateNoteById`                         |
-+---------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| DELETE `/api/notes/:id`   | `#L398`                                                             | `#L298`                                                            | `noteService.deleteNote`                             |
-+---------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| GET `/api/notes/:id`      | `#L462`                                                             | `#L253`                                                            | `noteService.getNoteById`                            |
-+---------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| GET `/api/notes`          | `#L528`                                                             | `#L343`                                                            | `noteService.searchNotes`,\                          |
-|                           |                                                                     |                                                                    | OpenAI embeddings                                    |
-+---------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| GET `/api/notes/:id/\     | `#L893`                                                             | `#L620`                                                            | `workspaceModel.findById`                            |
-| workspaces`               |                                                                     |                                                                    |                                                      |
-+---------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| POST `/api/notes/:id/\    | `#L662`                                                             | `#L665`                                                            | `noteService.\                                       |
-| share`                    |                                                                     |                                                                    | shareNoteToWorkspace`,\                              |
-|                           |                                                                     |                                                                    | `workspaceModel`                                     |
-+---------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| POST `/api/notes/:id/\    | `#L784`                                                             | `#L764`                                                            | `noteService.copyNote`,\                             |
-| copy`                     |                                                                     |                                                                    | `workspaceModel`                                     |
-+---------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
+| Interface | Describe Group Location, No Mocks | Describe Group Location, With Mocks | Mocked Components |
+|---|---|---|---|
+| POST `/api/notes` | `backend/src/__tests__/unmocked/notes.normal.test.ts#L46` | `backend/src/__tests__/mocked/notes.mocked.test.ts#L66` | Notes, OpenAI |
+| PUT `/api/notes/:id` | `#L288` | `#L219` | Notes, OpenAI |
+| DELETE `/api/notes/:id` | `#L406` | `#L315` | Notes |
+| GET `/api/notes/:id` | `#L470` | `#L270` | Notes |
+| GET `/api/notes` | `#L537` | `#L360` | Notes, Workspaces, OpenAI |
+| GET `/api/notes/:id/workspaces` | `#L910` | `#L643` | Notes |
+| POST `/api/notes/:id/share` | `#L671` | `#L688` | Notes, Workspaces |
+| POST `/api/notes/:id/copy` | `#L793` | `#L787` | Notes |
+
 ##### Workspaces API
 
-+----------------------------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| Interface                                    | Describe Group Location, No Mocks                                   | Describe Group Location, With Mocks                                | Mocked Components                                    |
-+==============================================+=====================================================================+====================================================================+======================================================+
-| POST `/api/workspace`                        | `backend/src/__tests__/\                                            | `backend/src/__tests__/\                                           | `workspaceService.\                                  |
-|                                              | unmocked/workspace.normal.\                                         | mocked/workspace.mocked.\                                          | createWorkspace`                                     |
-|                                              | test.ts#L45`                                                        | test.ts#L237`                                                      |                                                      |
-+----------------------------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| GET `/api/workspace/personal`                | `#L167`                                                             | `#L277`                                                            | `workspaceService.\                                  |
-|                                              |                                                                     |                                                                    | getPersonalWorkspaces`                               |
-+----------------------------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| GET `/api/workspace/user`                    | `#L290`                                                             | `#L330`                                                            | `workspaceService.\                                  |
-|                                              |                                                                     |                                                                    | getUserWorkspaces`                                   |
-+----------------------------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| GET `/api/workspace/:id`                     | `#L352`                                                             | `#L364`                                                            | `workspaceService.\                                  |
-|                                              |                                                                     |                                                                    | getWorkspaceById`                                    |
-+----------------------------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| GET `/api/workspace/:id/members`             | `#L410`                                                             | `#L398`                                                            | `workspaceService.getMembers`,\                      |
-|                                              |                                                                     |                                                                    | `notificationService`                                |
-+----------------------------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| GET `/api/workspace/:id/tags`                | `#L454`                                                             | `#L448`                                                            | `workspaceService.\                                  |
-|                                              |                                                                     |                                                                    | getWorkspaceTags`                                    |
-+----------------------------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| GET `/api/workspace/:id/\                    | `#L536`                                                             | `#L482`                                                            | `workspaceService.getMembership`                     |
-| membership/:userId`                          |                                                                     |                                                                    |                                                      |
-+----------------------------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| POST `/api/workspace/:id/members`            | `#L619`                                                             | `#L516`                                                            | `workspaceService.addMembers`,\                      |
-|                                              |                                                                     |                                                                    | `notificationService`                                |
-+----------------------------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| POST `/api/workspace/:id/leave`              | `#L847`                                                             | `#L694`                                                            | `workspaceService.\                                  |
-|                                              |                                                                     |                                                                    | leaveWorkspace`                                      |
-+----------------------------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| PUT `/api/workspace/:id`                     | `#L959`                                                             | `#L712`                                                            | `workspaceService.\                                  |
-|                                              |                                                                     |                                                                    | updateWorkspace`                                     |
-+----------------------------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| PUT `/api/workspace/:id/picture`             | `#L1051`                                                            | `#L748`                                                            | `workspaceService.\                                  |
-|                                              |                                                                     |                                                                    | updateWorkspacePicture`, `storage`                   |
-+----------------------------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| DELETE `/api/workspace/:id/\                 | `#L1156`                                                            | `#L784`                                                            | `workspaceService.removeMember`                      |
-| members/:userId`                             |                                                                     |                                                                    |                                                      |
-+----------------------------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| DELETE `/api/workspace/:id`                  | `#L1323`                                                            | `#L818`                                                            | `workspaceService.\                                  |
-|                                              |                                                                     |                                                                    | deleteWorkspace`,\                                   |
-|                                              |                                                                     |                                                                    | `notificationService`                                |
-+----------------------------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| GET `/api/workspace/:id/poll`                | `#L1429`                                                            | `#L852`                                                            | `workspaceService.\                                  |
-|                                              |                                                                     |                                                                    | getWorkspaceWithPolling`                             |
-+----------------------------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
+| Interface | Describe Group Location, No Mocks | Describe Group Location, With Mocks | Mocked Components |
+|---|---|---|---|
+| POST `/api/workspace` | `backend/src/__tests__/unmocked/workspace.normal.test.ts#L44` | `backend/src/__tests__/mocked/workspace.mocked.test.ts#L51` | Workspaces |
+| GET `/api/workspace/personal` | `#L166` | `#L94` | Workspaces |
+| GET `/api/workspace/user` | `#L281` | `#L147` | Workspaces |
+| GET `/api/workspace/:id` | `#L343` | `#L181` | Workspaces |
+| GET `/api/workspace/:id/members` | `#L401` | `#L215` | Workspaces, Firebase Cloud Messaging |
+| GET `/api/workspace/:id/tags` | `#L445` | `#L265` | Workspaces |
+| GET `/api/workspace/:id/membership/:userId` | `#L527` | `#L299` | Workspaces |
+| POST `/api/workspace/:id/members` | `#L610` | `#L333` | Workspaces, Firebase Cloud Messaging |
+| POST `/api/workspace/:id/leave` | `#L838` | `#L570` | Workspaces |
+| PUT `/api/workspace/:id` | `#L950` | `#L588` | Workspaces |
+| PUT `/api/workspace/:id/picture` | `#L1042` | `#L624` | Workspaces, Media |
+| DELETE `/api/workspace/:id/members/:userId` | `#L1147` | `#L660` | Workspaces |
+| DELETE `/api/workspace/:id` | `#L1314` | `#L694` | Workspaces, Firebase Cloud Messaging |
+| GET `/api/workspace/:id/poll` | `#L1420` | `#L728` | Workspaces |
 
 ##### Authentication API
 
-+----------------------------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| Interface                                    | Describe Group Location, No Mocks                                   | Describe Group Location, With Mocks                                | Mocked Components                                    |
-+==============================================+=====================================================================+====================================================================+======================================================+
-| POST `/api/auth/signup`                      | `backend/src/__tests__/\                                            | `backend/src/__tests__/\                                           | `authService.signUp`,\                               |
-|                                              | unmocked/auth.normal.\                                              | mocked/auth.mocked.\                                               | Google token verifier,\                              |
-|                                              | test.ts#L123`                                                       | test.ts#L74`                                                       | `workspaceService`                                   |
-+----------------------------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| POST `/api/auth/signin`                      | `#L151`                                                             | `#L290`                                                            | `authService.signIn`                                 |
-+----------------------------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| POST `/api/auth/dev-login`                   | `#L68`                                                              | `#L394`                                                            | `authService.devLogin`                               |
-+----------------------------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
+| Interface | Describe Group Location, No Mocks | Describe Group Location, With Mocks | Mocked Components |
+|---|---|---|---|
+| POST `/api/auth/signup` | `backend/src/__tests__/unmocked/auth.normal.test.ts#L57` | `backend/src/__tests__/mocked/auth.mocked.test.ts#L57` | Users, Workspaces, Google Auth |
+| POST `/api/auth/signin` | `#L105` | `#L453` | Users, Google Auth |
+| POST `/api/auth/dev-login` | `#L122` | `#L655` | Users, Database |
 
 ##### User API
 
-+----------------------------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| Interface                                    | Describe Group Location, No Mocks                                   | Describe Group Location, With Mocks                                | Mocked Components                                    |
-+==============================================+=====================================================================+====================================================================+======================================================+
-| GET `/api/users/profile`                     | `backend/src/__tests__/\                                            | —                                                                  | —                                                    |
-|                                              | unmocked/user.normal.\                                              |                                                                    |                                                      |
-|                                              | test.ts#L39`                                                        |                                                                    |                                                      |
-+----------------------------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| PUT `/api/users/profile`                     | `#L57`                                                              | `backend/src/__tests__/\                                           | `userModel.updateOne`,\                              |
-|                                              |                                                                     | mocked/user.mocked.\                                               | `workspaceModel`                                     |
-|                                              |                                                                     | test.ts#L48`                                                       |                                                      |
-+----------------------------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| DELETE `/api/users/profile`                  | `#L166`                                                             | `#L104`                                                            | `workspaceModel`,\                                   |
-|                                              |                                                                     |                                                                    | notification service                                 |
-+----------------------------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| POST `/api/users/fcm-token`                  | `#L230`                                                             | `#L155`                                                            | `userModel.updateOne`                                |
-+----------------------------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| GET `/api/users/:id`                         | `#L273`                                                             | `#L209`                                                            | `userModel.findById`                                 |
-+----------------------------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| GET `/api/users/email/:email`                | `#L318`                                                             | `#L260`                                                            | `userModel.findByEmail`                              |
-+----------------------------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
+| Interface | Describe Group Location, No Mocks | Describe Group Location, With Mocks | Mocked Components |
+|---|---|---|---|
+| GET `/api/user/profile` | `backend/src/__tests__/unmocked/user.normal.test.ts#L44` | `backend/src/__tests__/mocked/user.mocked.test.ts` | — |
+| PUT `/api/user/profile` | `#L76` | `#L52` | Users, Workspaces |
+| DELETE `/api/user/profile` | `#L279` | `#L125` | Workspaces |
+| POST `/api/user/fcm-token` | `#L494` | `#L176` | Users |
+| GET `/api/user/:id` | `#L630` | `#L247` | Users |
+| GET `/api/user/email/:email` | `#L700` | `#L349` | Users |
 
 ##### Message API
 
-+----------------------------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| Interface                                    | Describe Group Location, No Mocks                                   | Describe Group Location, With Mocks                                | Mocked Components                                    |
-+==============================================+=====================================================================+====================================================================+======================================================+
-| GET `/api/messages/\                         | `backend/src/__tests__/\                                            | `backend/src/__tests__/\                                           | `messageModel.findByWorkspace`                       |
-| workspace/:\                                 | unmocked/message.normal.\                                           | mocked/message.mocked.\                                            |                                                      |
-| workspaceId`                                 | test.ts#L61`                                                        | test.ts#L67`                                                       |                                                      |
-+----------------------------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| POST `/api/messages/\                        | `#L188`                                                             | `#L91`                                                             | `messageModel.create`,\                              |
-| workspace/:workspaceId`                      |                                                                     |                                                                    | `workspaceModel`                                     |
-+----------------------------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| DELETE `/api/messages/:messageId`            | `#L261`                                                             | `#L134`                                                            | `messageModel.deleteOne`                             |
-+----------------------------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
+| Interface | Describe Group Location, No Mocks | Describe Group Location, With Mocks | Mocked Components |
+|---|---|---|---|
+| GET `/api/messages/workspace/:workspaceId` | `backend/src/__tests__/unmocked/message.normal.test.ts#L40` | `backend/src/__tests__/mocked/message.mocked.test.ts#L48` | Messages |
+| POST `/api/messages/workspace/:workspaceId` | `#L181` | `#L72` | Messages, Workspaces |
+| DELETE `/api/messages/:messageId` | `#L268` | `#L115` | Messages |
 
 ##### Media API
 
-+----------------------------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
-| Interface                                    | Describe Group Location, No Mocks                                   | Describe Group Location, With Mocks                                | Mocked Components                                    |
-+==============================================+=====================================================================+====================================================================+======================================================+
-| POST `/api/media/upload`                     | `backend/src/__tests__/\                                            | `backend/src/__tests__/\                                           | `storage.uploadImage`,\                              |
-|                                              | unmocked/media.normal.\                                             | mocked/media.mocked.\                                              | file system stubs                                    |
-|                                              | test.ts#L56`                                                        | test.ts#L55`                                                       |                                                      |
-+----------------------------------------------+---------------------------------------------------------------------+--------------------------------------------------------------------+------------------------------------------------------+
+| Interface | Describe Group Location, No Mocks | Describe Group Location, With Mocks | Mocked Components |
+|---|---|---|---|
+| POST `/api/media/upload` | `backend/src/__tests__/unmocked/media.normal.test.ts#L78` | `backend/src/__tests__/mocked/media.mocked.test.ts#L54` | Media |
+
 #### 2.1.2. Commit Hash Where Tests Run
 `c5f46d61177b82ff74c9c30dfd32a5e24de5d683`
 
@@ -162,6 +89,7 @@
 
 1. `cd backend`
 2. `npm install`
+3. Add an OpenAI api key to your .env file. You can find our api key in the M5 Report. 
 3. `npm test`
 
 ---
@@ -187,18 +115,10 @@
 
 ### 3.1. Test Locations
 
-+--------------------------------------+------------------------------------------------------------------------------+
-| **Non-Functional Requirement**       | **Location in Git**                                                          |
-+======================================+==============================================================================+
-| Backend – Search Speed               | `ThingSpace.ts/backend/src/\                                                 |
-|                                      | __tests__/notes.latency.\                                                    |
-|                                      | test.ts`                                                                     |
-+--------------------------------------+------------------------------------------------------------------------------+
-| Frontend – Two-Click Navigation      | `frontend/app/src/androidTest/\                                              |
-|                                      | java/com/cpen321/\                                                           |
-|                                      | usermanagement/\                                                             |
-|                                      | TestReachWithTwoClicks.kt`                                                   |
-+--------------------------------------+------------------------------------------------------------------------------+
+| **Non-Functional Requirement** | **Location in Git** |
+|---|---|
+| Backend – Search Speed | `ThingSpace.ts/backend/src/__tests__/notes.latency.test.ts` |
+| Frontend – Two-Click Navigation | `frontend/app/src/androidTest/java/com/cpen321/usermanagement/TestReachWithTwoClicks.kt` |
 
 #### Backend – Search Speed (`notes.latency.test.ts`)
 - **How to run:** `cd backend && npm test -- __tests__/non-func-tests`
@@ -316,36 +236,39 @@ Two pre-existing workspaces.
 | Scenario Steps | Test Case Steps |
 |---|---|
 | **Create Note** | |
-| 1. Open “Create Note” screen. | Tap pencil icon. |
-| 2. App shows metadata fields and create button. | Verify “Note Type”, “Tags”, “Fields”. |
-| 3a. Create note with no fields. | Click Create with no fields. |
-| 3a1. Error. | **“Please add at least one field”** |
-| 3b. Create note with empty field label. | Add field but leave label blank; click Create. |
-| 3b1. Error. | **“All fields must have a label”** |
-| 3. User fills fields. | Add tag(s), add field “Notes”, enter content. |
-| 4. Click Create. | |
-| 5. Note created. | Verify note appears. |
+| 1. Open "Create Note" screen. | Tap pencil icon in workspace screen. |
+| 2. App shows metadata fields and create button. | Verify "Create Note" button present. |
+| 3a. Create note with no title. | Click "Create Note" button. Don't input title. Click "Create". |
+| 3a1. Error. | **"Please enter a title"** |
+| 3. Add title. | Enter "Test Note". |
+| 4a. Create note with no fields. | Click "Create" with no fields added. |
+| 4a1. Error. | **"Please add at least one field"** |
+| 4b. Create note with empty field label. | Add field (select TEXT type). Add tag "important". Clear field label; click "Create". |
+| 4b1. Error. | **"All fields must have a label"** |
+| 4. Add field label and content. | Input field label "Notes". Input content in field. |
+| 5. Click Create. | Click "Create". |
+| 6. Note created. | Verify note "Test Note" appears in workspace. |
 | **Update Note** | |
-| 6. Open note to edit. | Click pencil icon on note. |
-| 7. App shows editable fields. | Verify tag add/remove. |
-| 8. Modify content & tags. | |
-| 9. Click Save. | |
-| 10. Note updated. | Verify new values. |
+| 7. Open note to edit. | Navigate to note → click pencil icon. |
+| 8. App shows editable fields. | Verify fields editable. Verify tags can be added/removed (click existing tag). |
+| 9. Modify content & tags. | Change field content. Add new tag. Remove existing tag. |
+| 10. Click Save. | Click "Save". |
+| 11. Note updated. | Verify changes reflected in Note Details screen. |
 | **Share Note** | |
-| 11. Select “Share Note”. | Click Share icon. |
-| 12. Workspace selection dialog. | Verify “Share Note” + workspace list. |
-| 13. Select workspace & confirm. | Click Share. |
-| 14. Note shared. | **“Note shared to workspace successfully”**, note moves workspaces. |
+| 12. Select "Share Note". | Open note edit screen → click Share icon. |
+| 13. Workspace selection dialog. | Verify "Share Note" + workspace list visible. |
+| 14. Select workspace & confirm. | Select workspace → click "Share". |
+| 15. Note shared. | **"Note shared to workspace successfully"**. Verify note in target workspace, removed from original. |
 | **Copy Note** | |
-| 15. Select “Copy Note”. | Click Copy icon. |
-| 16. Workspace selection. | Verify UI. |
-| 17. Select workspace. | Click Copy. |
-| 18. Note copied. | Appears in both workspaces. |
+| 16. Select "Copy Note". | Open note edit screen → click Copy icon. |
+| 17. Workspace selection. | Verify "Copy Note" + workspace list visible. |
+| 18. Select workspace. | Select workspace → click "Copy". |
+| 19. Note copied. | Verify note appears in both target and source workspaces. |
 | **Delete Note** | |
-| 19. Select “Delete Note”. | Tap trash. |
-| 20. Confirmation dialog. | **“Are you sure… cannot be undone”** |
-| 21. Confirm. | Click Delete. |
-| 22. Note deleted. | Verify removal. |
+| 20. Select "Delete Note". | Navigate to note → click trash icon. |
+| 21. Confirmation dialog. | Verify "Delete Note" + **"Are you sure… cannot be undone"** |
+| 22. Confirm. | Click "Delete". |
+| 23. Note deleted. | **"Note successfully deleted"**. Verify note removed from workspace. |
 
 ![image info](./graphics/frontend-manage-notes-testlog.png)
 
