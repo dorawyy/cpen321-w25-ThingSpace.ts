@@ -606,7 +606,7 @@ The dependency of Users on interfaces from notes and workspaces is because user 
 ![image info](./graphics/CreateNoteTemplate.jpg)
 
 4. [**[CREATE WORKSPACE]**](#uc4)\
-![image info](./graphics/CreateWorkspace.png)
+![image info](./graphics/CreateWorkspace.jpg)
 
 5. [**[SEND A CHAT MESSAGE]**](#uc5)\
 ![image info](./graphics/ChatMessage.png)
