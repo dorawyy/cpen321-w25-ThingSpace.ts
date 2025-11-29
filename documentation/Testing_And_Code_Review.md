@@ -234,36 +234,39 @@ Two pre-existing workspaces.
 | Scenario Steps | Test Case Steps |
 |---|---|
 | **Create Note** | |
-| 1. Open “Create Note” screen. | Tap pencil icon. |
-| 2. App shows metadata fields and create button. | Verify “Note Type”, “Tags”, “Fields”. |
-| 3a. Create note with no fields. | Click Create with no fields. |
-| 3a1. Error. | **“Please add at least one field”** |
-| 3b. Create note with empty field label. | Add field but leave label blank; click Create. |
-| 3b1. Error. | **“All fields must have a label”** |
-| 3. User fills fields. | Add tag(s), add field “Notes”, enter content. |
-| 4. Click Create. | |
-| 5. Note created. | Verify note appears. |
+| 1. Open "Create Note" screen. | Tap pencil icon in workspace screen. |
+| 2. App shows metadata fields and create button. | Verify "Create Note" button present. |
+| 3a. Create note with no title. | Click "Create Note" button. Don't input title. Click "Create". |
+| 3a1. Error. | **"Please enter a title"** |
+| 3. Add title. | Enter "Test Note". |
+| 4a. Create note with no fields. | Click "Create" with no fields added. |
+| 4a1. Error. | **"Please add at least one field"** |
+| 4b. Create note with empty field label. | Add field (select TEXT type). Add tag "important". Clear field label; click "Create". |
+| 4b1. Error. | **"All fields must have a label"** |
+| 4. Add field label and content. | Input field label "Notes". Input content in field. |
+| 5. Click Create. | Click "Create". |
+| 6. Note created. | Verify note "Test Note" appears in workspace. |
 | **Update Note** | |
-| 6. Open note to edit. | Click pencil icon on note. |
-| 7. App shows editable fields. | Verify tag add/remove. |
-| 8. Modify content & tags. | |
-| 9. Click Save. | |
-| 10. Note updated. | Verify new values. |
+| 7. Open note to edit. | Navigate to note → click pencil icon. |
+| 8. App shows editable fields. | Verify fields editable. Verify tags can be added/removed (click existing tag). |
+| 9. Modify content & tags. | Change field content. Add new tag. Remove existing tag. |
+| 10. Click Save. | Click "Save". |
+| 11. Note updated. | Verify changes reflected in Note Details screen. |
 | **Share Note** | |
-| 11. Select “Share Note”. | Click Share icon. |
-| 12. Workspace selection dialog. | Verify “Share Note” + workspace list. |
-| 13. Select workspace & confirm. | Click Share. |
-| 14. Note shared. | **“Note shared to workspace successfully”**, note moves workspaces. |
+| 12. Select "Share Note". | Open note edit screen → click Share icon. |
+| 13. Workspace selection dialog. | Verify "Share Note" + workspace list visible. |
+| 14. Select workspace & confirm. | Select workspace → click "Share". |
+| 15. Note shared. | **"Note shared to workspace successfully"**. Verify note in target workspace, removed from original. |
 | **Copy Note** | |
-| 15. Select “Copy Note”. | Click Copy icon. |
-| 16. Workspace selection. | Verify UI. |
-| 17. Select workspace. | Click Copy. |
-| 18. Note copied. | Appears in both workspaces. |
+| 16. Select "Copy Note". | Open note edit screen → click Copy icon. |
+| 17. Workspace selection. | Verify "Copy Note" + workspace list visible. |
+| 18. Select workspace. | Select workspace → click "Copy". |
+| 19. Note copied. | Verify note appears in both target and source workspaces. |
 | **Delete Note** | |
-| 19. Select “Delete Note”. | Tap trash. |
-| 20. Confirmation dialog. | **“Are you sure… cannot be undone”** |
-| 21. Confirm. | Click Delete. |
-| 22. Note deleted. | Verify removal. |
+| 20. Select "Delete Note". | Navigate to note → click trash icon. |
+| 21. Confirmation dialog. | Verify "Delete Note" + **"Are you sure… cannot be undone"** |
+| 22. Confirm. | Click "Delete". |
+| 23. Note deleted. | **"Note successfully deleted"**. Verify note removed from workspace. |
 
 ![image info](./graphics/frontend-manage-notes-testlog.png)
 
