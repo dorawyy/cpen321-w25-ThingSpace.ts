@@ -40,7 +40,7 @@
 | GET `/api/workspace/:id/members` | `#L401` | `#L215` | Workspaces, Firebase Cloud Messaging |
 | GET `/api/workspace/:id/tags` | `#L445` | `#L265` | Workspaces |
 | GET `/api/workspace/:id/membership/:userId` | `#L527` | `#L299` | Workspaces |
-| POST `/api/workspace/:id/members` | `#L610` | `#L333` | Workspaces, Users, Firebase Cloud Messaging |
+| POST `/api/workspace/:id/members` | `#L610` | `#L333` | Workspaces, Firebase Cloud Messaging |
 | POST `/api/workspace/:id/leave` | `#L838` | `#L570` | Workspaces |
 | PUT `/api/workspace/:id` | `#L950` | `#L588` | Workspaces |
 | PUT `/api/workspace/:id/picture` | `#L1042` | `#L624` | Workspaces, Media |
@@ -60,8 +60,8 @@
 
 | Interface | Describe Group Location, No Mocks | Describe Group Location, With Mocks | Mocked Components |
 |---|---|---|---|
-| GET `/api/user/profile` | `backend/src/__tests__/unmocked/user.normal.test.ts#L44` | — | — |
-| PUT `/api/user/profile` | `#L76` | `backend/src/__tests__/mocked/user.mocked.test.ts#L52` | Users, Workspaces |
+| GET `/api/user/profile` | `backend/src/__tests__/unmocked/user.normal.test.ts#L44` | `backend/src/__tests__/mocked/user.mocked.test.ts` | — |
+| PUT `/api/user/profile` | `#L76` | `#L52` | Users, Workspaces |
 | DELETE `/api/user/profile` | `#L279` | `#L125` | Workspaces |
 | POST `/api/user/fcm-token` | `#L494` | `#L176` | Users |
 | GET `/api/user/:id` | `#L630` | `#L247` | Users |
