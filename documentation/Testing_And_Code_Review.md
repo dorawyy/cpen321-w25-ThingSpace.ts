@@ -44,7 +44,7 @@
 | POST `/api/workspace/:id/members` | `#L610` | `#L333` | Workspaces, Firebase Cloud Messaging |
 | POST `/api/workspace/:id/leave` | `#L838` | `#L570` | Workspaces |
 | PUT `/api/workspace/:id` | `#L950` | `#L588` | Workspaces |
-| PUT `/api/workspace/:id/picture` | `#L1042` | `#L624` | Workspaces, Media |
+| PUT `/api/workspace/:id/picture` | `#L1042` | `#L624` | Workspaces |
 | DELETE `/api/workspace/:id/members/:userId` | `#L1147` | `#L660` | Workspaces |
 | DELETE `/api/workspace/:id` | `#L1314` | `#L694` | Workspaces, Firebase Cloud Messaging |
 | GET `/api/workspace/:id/poll` | `#L1420` | `#L728` | Workspaces |
