@@ -370,6 +370,26 @@ NOTES: 5 most major use cases
             - **Response**: `200 OK { note }` | `403 Forbidden` | `404 Not Found`
             - **Purpose**: Creates a copy of a note in a different workspace. Used for creating notes from templates.
 
+        8. **noteModel.create** (Internal Database Method)
+            ```typescript
+            static async noteModel.create({
+            userId:string,
+            workspaceId:string,
+            fields:unknown[],
+            noteType: NoteType,
+            tags: string[],
+            vectorData: number[],
+            }): Promise<Note | null>
+             ```
+            - **Purpose** Creates a new note in the database
+
+        9. **noteModel.findById** (Internal Database Method)
+            ```typescript
+            static async noteModel.findById(noteId): Promise<Note | null>
+            ```
+            - **Purpose** Retrieves a note from the database by its id
+
+
 3. **Workspaces**
     - **Purpose**: The workspace contains its own general information, as well as a reference to member users and included notes. This component would be responsible for forwarding push notifications to member users on invite, and the banning functionality.
     - **Interfaces**:
@@ -475,6 +495,26 @@ NOTES: 5 most major use cases
             static async findById(workspaceId: string): Promise<Workspace | null>
             ```
             - **Purpose**: Exposes workspace retrieval by ID. Called by NoteService methods to verify workspace existence and membership before allowing note operations. Used in getNotes(), moveNoteToWorkspace(), and copyNoteToWorkspace().
+
+        17. **WorkspaceModel.create**
+            ```typescript
+            workspaceModel.create({name: data.name,
+                profile: {
+                    imagePath: string?,
+                    name: string,
+                    description: string?
+                },
+                ownerId: string,
+                members: string[]
+            }): Promise<Workspace>;
+            ```
+            - **Purpose**: Create a new Workspace object
+
+        18. **WorkspaceModel.findOne** (Internal Database Method)
+            ```typescript
+            static async findOne(name: string, ownerId: string): Promise<Workspace | null>
+            ```
+            -**Purpose**: Used for workspace uniqueness check, to see if there already is a workspace with the same name belonging to the same user.
 
 4. **Messages**
     - **Purpose**: The messages component handles real-time chat functionality within workspaces. It manages creating, retrieving, and deleting chat messages, enabling workspace members to communicate with each other. Messages are tied to specific workspaces and ordered chronologically.
